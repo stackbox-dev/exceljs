@@ -1,6 +1,6 @@
 {
   "name": "@stackbox-dev/exceljs",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "description": "Excel Workbook Manager - Read and Write xlsx and csv Files.",
   "private": true,
   "license": "MIT",

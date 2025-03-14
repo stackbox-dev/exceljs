@@ -1930,6 +1930,11 @@ export namespace stream {
 			 * Styles can add some performance overhead. Default is false
 			 */
 			useStyles: boolean;
+
+			/**
+			 * Control whether to use fs-capacitor to reduce memory usage
+			 */
+			dontUseFsCapacitor?: boolean;
 		}
 
 		interface ArchiverZipOptions {

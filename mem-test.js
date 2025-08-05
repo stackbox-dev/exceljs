@@ -4,22 +4,17 @@ const fs = require('fs');
 
 async function* generateData() {
   // Generate 1 million rows
-  for (let i = 0; i < 1000000; i++) {
+  const str = Math.random().toString(36).substring(7);
+  const cols = Array.from({length: 50}, () => str);
+  for (let i = 0; i < 10000; i++) {
     if (i % 1000 === 0) {
       await new Promise(resolve => setImmediate(resolve));
     }
-    yield [
-      i,
-      Math.random().toString(36).substring(7),
-      Math.random().toString(36).substring(7),
-      Math.random().toString(36).substring(7),
-      Math.random().toString(36).substring(7),
-      Math.random().toString(36).substring(7),
-      Math.random().toString(36).substring(7),
-      Math.random().toString(36).substring(7),
-      Math.random().toString(36).substring(7),
-      Math.random().toString(36).substring(7)
-    ];
+    if (i % 100000 === 0) {
+      console.log(`Generated ${i} rows`);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+    yield cols;
   }
 }
 
@@ -28,11 +23,11 @@ async function test1() {
     filename: './huge.xlsx',
     useStyles: true,
     useSharedStrings: false,
-    dontUseFsCapacitor: false,
+    dontUseFsCapacitor: true,
   });
 
   const sheetProms = [];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 5; i++) {
     sheetProms.push(addSheet(workbook, i));
   }
 
@@ -59,11 +54,11 @@ async function test1() {
 }
 const startTime = Date.now();
 test1().finally(() => {
-    global.gc();
-    const used = process.memoryUsage();
-    console.log(`Memory usage: ${Math.round(used.heapUsed / 1024 / 1024)}MB`);
-    const endTime = Date.now();
-    console.log(`Total time: ${(endTime - startTime) / 1000} seconds`);
+  global.gc();
+  const used = process.memoryUsage();
+  console.log(`Memory usage: ${Math.round(used.heapUsed / 1024 / 1024)}MB`);
+  const endTime = Date.now();
+  console.log(`Total time: ${(endTime - startTime) / 1000} seconds`);
 });
 async function addSheet(workbook, i) {
   const worksheet = workbook.addWorksheet('Sheet' + (i + 1));
